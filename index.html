@@ -16,7 +16,8 @@
 
     h1 {
       text-align: center;
-      padding: 20px 10px 5px;
+      margin: 0;
+      padding-top: 30px;
       font-weight: 300;
       letter-spacing: 2px;
     }
@@ -24,7 +25,8 @@
     .subtitle {
       text-align: center;
       color: #ff9aa2;
-      margin-bottom: 20px;
+      margin-top: 5px;
+      margin-bottom: 30px;
     }
 
     .timeline {
@@ -249,7 +251,7 @@ function unlock() {
     document.getElementById("mainContent").style.display = "block";
 
     const music = document.getElementById("bgMusic");
-    music.play().catch(() => {}); // prevents mobile errors
+    music.play().catch(() => {});
   } else {
     alert("try again :)");
   }
@@ -274,21 +276,47 @@ function typeWriter() {
   }
 }
 
-const finalMessage = "I love you.\nผมรักเธอ"";
+// 💌 FINAL (with delay effect)
+const finalMessageEN = "I love you.";
+const finalMessageTH = "ผมรักเธอ";
 let j = 0;
+let phase = "en";
 
 function showFinal() {
   document.getElementById("final").style.display = "flex";
   document.getElementById("finalText").innerHTML = "";
   j = 0;
+  phase = "en";
   finalType();
 }
 
 function finalType() {
-  if (j < finalMessage.length) {
-    document.getElementById("finalText").innerHTML += finalMessage.charAt(j);
-    j++;
-    setTimeout(finalType, 80);
+  const el = document.getElementById("finalText");
+
+  if (phase === "en") {
+    if (j < finalMessageEN.length) {
+      el.innerHTML += finalMessageEN.charAt(j);
+      j++;
+      setTimeout(finalType, 80);
+    } else {
+      phase = "pause";
+      j = 0;
+      setTimeout(finalType, 1200); // 👈 delay before Thai appears
+    }
+  }
+
+  else if (phase === "pause") {
+    el.innerHTML += "<br><br>";
+    phase = "th";
+    finalType();
+  }
+
+  else if (phase === "th") {
+    if (j < finalMessageTH.length) {
+      el.innerHTML += finalMessageTH.charAt(j);
+      j++;
+      setTimeout(finalType, 100);
+    }
   }
 }
 </script>
