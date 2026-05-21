@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Story</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 30px 10px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .timeline {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-left: 2px solid #444;
+    }
+
+    .event {
+      margin-bottom: 40px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .event::before {
+      content: '';
+      position: absolute;
+      left: -9px;
+      top: 5px;
+      width: 14px;
+      height: 14px;
+      background: #ff4d6d;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff4d6d;
+    }
+
+    .date {
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 5px;
+    }
+
+    img {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+
+    .center {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #ff4d6d;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #typing {
+      font-size: 18px;
+      color: #ff9aa2;
+      margin-top: 20px;
+      min-height: 40px;
+      text-align: center;
+    }
+
+    .final-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    #lockScreen {
+      text-align: center;
+      margin-top: 120px;
+    }
+
+    /* LOADING SCREEN */
+    #loadingScreen {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:black;
+      color:white;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      z-index:9999;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- 🧠 LOADING SCREEN -->
+<div id="loadingScreen">
+  <div style="font-size:22px; margin-bottom:20px;">
+    replaying everything...
+  </div>
+
+  <div style="
+    width:200px;
+    height:4px;
+    background:#333;
+    border-radius:5px;
+    overflow:hidden;
+  ">
+    <div id="loadBar" style="
+      width:0%;
+      height:100%;
+      background:#ff4d6d;
+      box-shadow:0 0 10px #ff4d6d;
+      transition: width 0.3s;
+    "></div>
+  </div>
+</div>
+
+<!-- 🔐 LOCK SCREEN -->
+<div id="lockScreen" style="display:none;">
+  <h2>Only you would know this</h2>
+  <p>think back to the beginning</p>
+
+  <input id="password" placeholder="dd/mm/yy">
+  <br><br>
+  <button onclick="unlock()">unlock</button>
+</div>
+
+<!-- ❤️ MAIN CONTENT -->
+<div id="mainContent" style="display:none;">
+
+  <h1>Our Story</h1>
+
+  <div class="timeline">
+
+    <div class="event">
+      <div class="date">[Date]</div>
+      <div class="title">The First Time We Met</div>
+      <div class="desc">I didn’t know it then, but everything was about to change.</div>
+      <img src="photo1.jpg">
+    </div>
+
+    <div class="event">
+      <div class="date">[Date]</div>
+      <div class="title">That Night</div>
+      <div class="desc">I kept replaying everything in my head.</div>
+      <img src="photo2.jpg">
+    </div>
+
+    <div class="event">
+      <div class="date">[Date]</div>
+      <div class="title">When It Changed</div>
+      <div class="desc">Somewhere between everything… I started falling.</div>
+      <img src="photo3.jpg">
+    </div>
+
+  </div>
+
+  <div class="center">
+    <button onclick="startTyping()">there’s one more thing…</button>
+    <div id="typing"></div>
+  </div>
+
+</div>
+
+<!-- 💌 FINAL SCREEN -->
+<div id="final" class="final-screen">
+  <div id="finalText"></div>
+</div>
+
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="your-song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // 🧠 FAKE LOADING
+  let progress = 0;
+
+  function fakeLoad() {
+    const bar = document.getElementById("loadBar");
+
+    const interval = setInterval(() => {
+      progress += Math.random() * 20;
+
+      if (progress >= 100) {
+        progress = 100;
+        bar.style.width = progress + "%";
+
+        setTimeout(() => {
+          document.getElementById("loadingScreen").style.display = "none";
+          document.getElementById("lockScreen").style.display = "block";
+        }, 500);
+
+        clearInterval(interval);
+      }
+
+      bar.style.width = progress + "%";
+    }, 300);
+  }
+
+  window.onload = fakeLoad;
+
+  // 🔑 PASSWORD
+  function unlock() {
+    const input = document.getElementById("password").value;
+
+    if (input === "12/06/23") {
+      document.getElementById("lockScreen").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+      document.getElementById("bgMusic").play();
+    } else {
+      alert("try again :)");
+    }
+  }
+
+  // ✨ TYPING
+  const message = "If you made it this far... there’s something I’ve been wanting to tell you.";
+  let i = 0;
+
+  function startTyping() {
+    document.getElementById("typing").innerHTML = "";
+    i = 0;
+    typeWriter();
+  }
+
+  function typeWriter() {
+    if (i < message.length) {
+      document.getElementById("typing").innerHTML += message.charAt(i);
+      i++;
+      setTimeout(typeWriter, 40);
+    } else {
+      setTimeout(showFinal, 1500);
+    }
+  }
+
+  // 💌 FINAL
+  const finalMessage = "I love you.";
+  let j = 0;
+
+  function showFinal() {
+    document.getElementById("final").style.display = "flex";
+    finalType();
+  }
+
+  function finalType() {
+    if (j < finalMessage.length) {
+      document.getElementById("finalText").innerHTML += finalMessage.charAt(j);
+      j++;
+      setTimeout(finalType, 80);
+    }
+  }
+</script>
+
+</body>
+</html>
